@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="335.0" prefWidth="326.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.FXMLDocumentController">
+    <children>
+      <Button fx:id="button" layoutX="126.0" layoutY="268.0" onAction="#Login" prefHeight="25.0" prefWidth="69.0" text="ok" />
+        
+      <TextField fx:id="txtUsuario" layoutX="75.0" layoutY="105.0" promptText="Usuario" />
+      <Label layoutX="136.0" layoutY="82.0" text="Usuario" />
+      <Label layoutX="123.0" layoutY="175.0" text="Contrasena" />
+      <Label layoutX="72.0" layoutY="31.0" text="LOGIN PETPROGRAM">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <PasswordField fx:id="txtPasword" layoutX="75.0" layoutY="198.0" promptText="Contrasena" />
+      <Label fx:id="txtErrorUser" layoutX="104.0" layoutY="135.0" text="Usuario no encontrado" textFill="#d70909" visible="false">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtErrorPass" layoutX="105.0" layoutY="229.0" text="Contrasena Erronea" textFill="#d70909" visible="false">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>
