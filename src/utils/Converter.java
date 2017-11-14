@@ -5,45 +5,77 @@
  */
 package utils;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  *
  * @author migmosquera
  */
-public class Converter implements Serializable{
-    
-    public byte[] cifra(String sinCifrar) throws Exception {
-	final byte[] bytes = sinCifrar.getBytes("UTF-8");
-	final Cipher aes = obtieneCipher(true);
-	final byte[] cifrado = aes.doFinal(bytes);
-	return cifrado;
-    }
-    
-    
-    private Cipher obtieneCipher(boolean paraCifrar) throws Exception {
-	final String frase = "FraseLargaConDiferentesLetrasNumerosYCaracteresEspeciales_áÁéÉíÍóÓúÚüÜñÑ1234567890!#%$&()=%_NO_USAR_ESTA_FRASE!_";
-	final MessageDigest digest = MessageDigest.getInstance("SHA");
-	digest.update(frase.getBytes("UTF-8"));
-	final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
+public class Converter implements Serializable {
 
-	final Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-	if (paraCifrar) {
-		aes.init(Cipher.ENCRYPT_MODE, key);
-	} else {
-		aes.init(Cipher.DECRYPT_MODE, key);
-	}
+    private String patronBusqueda = "9f0AwB7J8CpDuÑd5E6FQGlxnHMbcI3ñK4LeUNzO1ms2PtRvSVkWXqirTYaghZjoy";
+    private String patronEncripta = "wxBU7nIGj9Flm8f0ñAH1bcK3hdi4WJ5ZLCpDeMvTQuVkXqraYE6gosyNzÑOP2RSt";
 
-	return aes;
+    public String encriptarCadena(String cadena) {
+        String resultado = "";
+        for (int pos = 0; pos < cadena.length(); pos++) {
+            if (pos == 0) {
+                resultado = encriptarCaracter(cadena.substring(pos, pos + 1), cadena.length(), pos);
+            } else {
+                resultado += encriptarCaracter(cadena.substring(pos, pos + 1), cadena.length(), pos);
+            }
+        }
+        return resultado;
     }
-    
-    public String descifra(byte[] cifrado) throws Exception {
-	final Cipher aes = obtieneCipher(false);
-	final byte[] bytes = aes.doFinal(cifrado);
-	final String sinCifrar = new String(bytes, "UTF-8");
-	return sinCifrar;
+
+    public String encriptarCaracter(String caracter, int variable, int indice) {
+        int ind;
+        if (patronBusqueda.indexOf(caracter) != -1) {
+            ind = (patronBusqueda.indexOf(caracter) + variable + indice) % patronBusqueda.length();
+            return patronEncripta.substring(ind, ind + 1);
+        }
+        return caracter;
     }
+
+    public String desencriptaCadena(String cadena) {
+        String original = "";
+        for (int pos = 0; pos < cadena.length(); pos++) {
+            if (pos == 0) {
+                original = desencriptaCaracter(cadena.substring(pos, pos + 1), cadena.length(), pos);
+            } else {
+                original += desencriptaCaracter(cadena.substring(pos, pos + 1), cadena.length(), pos);
+            }
+        }
+        return original;
+    }
+
+    public String desencriptaCaracter(String caracter, int variable, int indice) {
+        int ind = 0;
+        if (patronEncripta.indexOf(caracter) != -1) {
+            if ((patronEncripta.indexOf(caracter) - variable - indice) > 0) {
+                ind = (patronEncripta.indexOf(caracter) - variable - indice) % patronEncripta.length();
+            } else {
+                ind = (patronBusqueda.length()) + ((patronEncripta.indexOf(caracter) - variable - indice) % patronEncripta.length());
+            }
+            ind = ind % patronEncripta.length();
+            return patronBusqueda.substring(ind, ind + 1);
+        } else {
+            return caracter;
+        }
+    }
+
 }

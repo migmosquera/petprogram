@@ -36,18 +36,14 @@ public class FXMLDocumentController implements Initializable {
     @PersistenceUnit(unitName="petProgramPU")
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("petProgramPU");
     EntityManager em = emf.createEntityManager();
-   
-    
     @FXML
     private TextField txtUsuario;
-    
     @FXML
     private PasswordField txtPasword;
     @FXML
     private Label txtErrorUser;
     @FXML
     private Label txtErrorPass;
-    
     @FXML
     private void Login(ActionEvent event) {
         
@@ -72,10 +68,16 @@ public class FXMLDocumentController implements Initializable {
                 Query queryUser = em.createNamedQuery("User.findByUsername");
                 queryUser.setParameter("username", txtUsuario.getText());
                 User user = (User) queryUser.getSingleResult();
-                System.out.println(user.getPass());
                 Converter convert = new Converter();
-                String pass = convert.descifra(user.getPass().getBytes(Charset.forName("UTF-8")));
-                System.out.println(pass);
+                String pass = convert.desencriptaCadena(user.getPass());
+                if(txtPasword.getText().equals(pass))
+                {
+                    System.out.println("usuario logueado");
+                }
+                else
+                {
+                    System.out.println("contrasena Incorrecta");
+                }
             }
             catch(Exception e)
             {
@@ -98,8 +100,8 @@ public class FXMLDocumentController implements Initializable {
                 User user = new User();
                 Converter convert = new Converter();
                 user.setUsername("admin");
-                byte[] pass = convert.cifra("admin");
-                user.setPass(Arrays.toString(pass));
+                String pass = convert.encriptarCadena("admin");
+                user.setPass(pass);
                 em.getTransaction().begin();
                 em.persist(user);
                 em.getTransaction().commit();
@@ -111,7 +113,6 @@ public class FXMLDocumentController implements Initializable {
              System.out.println("Fatal:" + e);
         }
        
-        
     }    
 
    
