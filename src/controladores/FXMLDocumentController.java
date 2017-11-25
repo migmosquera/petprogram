@@ -7,17 +7,20 @@ package controladores;
 
 import clases.User;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Border;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -97,14 +100,32 @@ public class FXMLDocumentController implements Initializable {
             List<User> users= queryUser.getResultList();
             if(users.isEmpty())
             {
-                User user = new User();
+                
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(FXMLDocumentController.class.getResource("/vistas/InserPass.fxml"));
+                AnchorPane page = (AnchorPane) loader.load();
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Edit Person");
+                dialogStage.initModality(Modality.WINDOW_MODAL);
+                Window primaryStage = null;
+                dialogStage.initOwner(primaryStage);
+                Scene scene = new Scene(page);
+                dialogStage.setScene(scene);
+                InserPassController controller = loader.getController();
+                controller.setDialogStage(dialogStage);
+                 dialogStage.showAndWait();
+                /*User user = new User();
                 Converter convert = new Converter();
                 user.setUsername("admin");
                 String pass = convert.encriptarCadena("admin");
                 user.setPass(pass);
                 em.getTransaction().begin();
                 em.persist(user);
-                em.getTransaction().commit();
+                em.getTransaction().commit();*/
+            }else
+            {
+                
+               
             }
             
         }
@@ -114,6 +135,8 @@ public class FXMLDocumentController implements Initializable {
         }
        
     }    
+
+    
 
    
     

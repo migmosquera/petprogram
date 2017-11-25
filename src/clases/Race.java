@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -16,6 +17,7 @@ import javax.persistence.OneToMany;
  * @author migmosquera
  */
 @Entity
+@Table(name="race")
 public class Race extends BasicAttributes {
 
     private String name;

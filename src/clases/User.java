@@ -28,20 +28,12 @@ import javax.persistence.Table;
     })
 public class User extends BasicAttributes {
 
-    private String name;
     private String email;
     private String username;
     private String pass;
     private Float phone;
     
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    
     @Column(name = "email")
     public String getEmail() {
         return email;
